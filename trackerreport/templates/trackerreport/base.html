@@ -1,0 +1,25 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>{% block title %} {% endblock %}</title>
+	<link rel="stylesheet" href="{% static 'trackerreport/css/src/style.css' %}" />
+	<link rel="stylesheet" href="{% static 'trackerreport/css/lib/bootstrap.min.css' %}" />
+	<link rel="stylesheet" href="{% static 'trackerreport/css/lib/uikit.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'trackerreport/css/src/simple-sidebar.css' %}" />
+
+    <script src="{% static 'trackerreport/js/lib/jquery.js' %}"></script>
+    <script src="{% static 'trackerreport/js/lib/bootstrap.min.js' %}"></script>
+	<script src="{% static 'trackerreport/js/lib/uikit.min.js' %}"></script>
+	<script src="{% static 'trackerreport/js/lib/uikit-icons.min.js' %}"></script>
+	
+</head>
+
+	{% block content %}
+
+	{% endblock%}
+
+</html>

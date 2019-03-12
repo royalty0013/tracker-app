@@ -1,0 +1,43 @@
+{% extends 'trackerreport/base.html' %}
+{% load staticfiles %}
+
+{% block title %}  Fuel Report | Tracker Report {% endblock %}
+
+
+
+{% block content %}
+
+{% include 'trackerreport/snippets/nav.html' %}
+
+<p style="color: #000066; font-weight: bolder;"> Welcome {{request.session.client_name | title }} !!! </p>
+
+<div class="reportBody">
+
+
+{% include 'trackerreport/snippets/HC.html' %} <br>
+
+
+<table class="table table-bordered">
+ <tr> 
+ 	<th> Reg. No </th>
+ 	<th> User Name  </th>
+ 	<th> Fuel Consumed (Ltrs) </th>
+ 	<th> Fuel per KM</th>
+ 	<th> Distance Covered (KM) </th>
+
+
+ </tr>
+ {% for v in vehicle_reports %}
+ <tr>
+ 	<td> {{ v.Target_name}}  </td>
+ 	<td> {{ v.Target_name}}  </td>
+ 	<td> {{v.Fuel_consumption | floatformat:"0"}} ltrs</td>
+ 	<td> {{v.Fuel_per_km}} ltrs</td>
+ 	<td> {{v.Total_distance | floatformat:"0"}} km</td>
+</tr>
+ {% endfor %}
+
+</table>
+</div>
+
+{% endblock %}

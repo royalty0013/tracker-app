@@ -1,0 +1,53 @@
+{% extends 'trackerreport/base.html' %}
+{% load staticfiles %}
+
+{% block title %}  Move Stat Report | Tracker Report {% endblock %}
+
+{% block content %}
+
+{% include 'trackerreport/snippets/nav.html' %}
+
+<div style="background-color: #D0D3D4; width: 100%;"> <span style="color: #fff; font-weight: bolder;"> Executed AT: 2019-03-05 </span></div>
+<div class="reportBody">
+	<table class="table table-bordered">
+ <tr> 
+ 	<th> TARGET NAME </th>
+ 	<th> LAST MOVED AT </th>
+ 	<th> LAST YESTERDAY AT</th>
+ 	<th> FIRST MOVED TODAY AT</th>
+
+ </tr>
+
+ {% for v in vehicle_reports %}
+ <tr>
+ 	<td> {{ v.Target_name}}  </td>
+ 	<td> {{v.Fuel_consumption}}</td>
+ 	<td> {{v.Total_distance}} </td>
+ 	<td> {{v.Fuel_per_km}}</td>
+</tr>
+{% endfor %}
+<!--
+ <tr>
+ 	<td>BAF 2434 ZM - Nemon  </td>
+ 	<td> 2019-03-04 22:04:19</td>
+ 	<td> 2019-03-04 22:04:19 </td>
+ 	<td> 2019-03-05 08:23:59</td>
+</tr>
+ <tr>
+ 	<td> BAH 6659 ZM - Samson  </td>
+ 	<td> 2019-03-04 22:04:19</td>
+ 	<td> 2019-03-04 22:04:19 </td>
+ 	<td> 2019-03-05 08:23:59</td>
+</tr>
+ <tr>
+ 	<td> BAF 2429 ZM - Musoni  </td>
+ 	<td> 2019-03-04 22:04:19</td>
+ 	<td> 2019-03-04 22:04:19 </td>
+ 	<td> 2019-03-05 08:23:59</td>
+</tr> -->
+
+
+</table>
+</div>
+
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends 'trackerreport/base.html' %}
+{% load staticfiles %}
+
+{% block title %}  Overspeed Report | Tracker Report {% endblock %}
+
+{% block content %}
+
+{% include 'trackerreport/snippets/nav.html' %}
+
+<div class="reportBody">
+
+{% include 'trackerreport/snippets/overspeedgraph.html' %} <br>
+
+<div style="background-color: #FFF; width: 100%;"> <span style="color: #AAAAAA; font-weight: bolder;"> Start Date: 2019-03-05 - End Date: 2019-03-05 &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp OverspeedMins:10mins</span></div> <br>
+
+<table class="table table-bordered">
+ <tr> 
+ 	<th> TARGET NAME </th>
+ 	<th> CONTINUE TIME INSTANCE </th>
+ </tr>
+ <tr>
+ 	<td> 003753 ZM - Benjamin  </td>
+ 	<td> 2019-03-04 22:04:19</td>
+ 
+</tr>
+ <tr>
+ 	<td> BAF 2434 ZM - Nemon </td>
+ 	<td> 2019-03-04 22:04:19</td>
+ 	
+</tr>
+ <tr>
+ 	<td> 003753 ZM - Benjamin  </td>
+ 	<td> 2019-03-04 22:04:19</td>
+ 	
+</tr>
+ <tr>
+ 	<td> 003753 ZM - Benjamin  </td>
+ 	<td> 2019-03-04 22:04:19</td>
+ 
+</tr>
+
+
+</table>
+</div>
+{% endblock %}
