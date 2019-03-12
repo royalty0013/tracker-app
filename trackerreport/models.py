@@ -16,6 +16,8 @@ class VehicleReport(models.Model):
 	move_at = models.CharField(max_length=100, blank=True, null=True)
 	overspeed = models.FloatField(null=True)
 	added = models.DateTimeField(auto_now_add=True)
+	
+
 
 	class Meta:
 		verbose_name = 'Vehicle Report' 
@@ -23,5 +25,20 @@ class VehicleReport(models.Model):
 
 	def __str__(self):
 		return self.target_name
+
+
+class login_hash(models.Model):
+	username = models.CharField(max_length=100)
+	hash_token = models.CharField(max_length=100)
+	added = models.DateTimeField(auto_now_add=True)
+
+
+	class Meta:
+		verbose_name = 'login hash'
+		verbose_name_plural = 'login hashs'
+
+	def __str__(self):
+		return self.username
+
 
 
