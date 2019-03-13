@@ -1,8 +1,11 @@
+import requests
+import json
+
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-import requests
-import json
+
+from trackerreport.models import LoginHash
 
 
 def index(request):
@@ -48,9 +51,19 @@ def login_process(request):
 		else:
 			request.session['login_hash'] = auth['user_api_hash']
 			request.session['client_name'] = username
+
+			save_hash(auth['user_api_hash'], username)
 			return HttpResponseRedirect("/fuel_report/")
     
 	return render(request, 'trackerreport/index.html', context)
+
+def save_hash(login_hash, username):
+	try:
+		get_hash = LoginHash.objects.get(hash_token=login_hash)
+	except LoginHash.DoesNotExist:
+		add_hash = LoginHash(username=username, hash_token=login_hash)
+		add_hash.save()
+
 
 def get_devices(request):
 	parameter = {'lang': 'en', 'user_api_hash':request.session['login_hash']}
