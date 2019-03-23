@@ -18,19 +18,19 @@
  	<th> Reg. No </th>
  	<th> Total Mileage(km)</th>
  	<th> Top speed(kph)</th>
- 	<th> Stay(km) </th>
+ 	<th> Overspeed(km) </th>
  	<th> Fuel Consumption(ltrs)</th>
 
  </tr>
- {% for v in vehicle_reports %}
+ {% for v in allReports %}
  <tr>
  	<td> 2019-03-01 </td>
  	<td> 2019-03-05 </td>
- 	<td> {{ v.Target_name}}  </td>
- 	<td> {{v.Total_distance | floatformat:"0"}} km </td>
- 	<td> {{v.Top_speed }} </td>
- 	<td> {{v.Stop_duration }} </td>
- 	<td> {{v.Fuel_consumption | floatformat:"0"}} ltrs </td>
+ 	<td> {{ v.target_name}}  </td>
+ 	<td> {{v.distance_covered | floatformat:"0"}} km </td>
+ 	<td> {{v.top_speed | floatformat:"0" }} </td>
+ 	<td> {{v.overspeed | floatformat:"0" }} </td>
+ 	<td> {{v.fuel_consumption | floatformat:"0"}} ltrs </td>
  {% endfor %}
 </tr>
  

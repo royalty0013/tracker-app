@@ -1,5 +1,6 @@
 {% extends 'trackerreport/base.html' %}
 {% load staticfiles %}
+{% load mathfilters %}
 
 {% block title %}  Fuel Report | Tracker Report {% endblock %}
 
@@ -9,31 +10,46 @@
 
 {% include 'trackerreport/snippets/nav.html' %}
 
-<p style="color: #000066; font-weight: bolder;"> Welcome {{request.session.client_name | title }} !!! </p>
+<p style="color: #000066; font-weight: bolder; display: inline-block;"> Welcome {{request.session.client_name | title }} !!! </p>
+
+<p style="color: #000066; font-weight: bolder; float: right;">  <a href="{% url 'log_out' %}"> <span class="glyphicon glyphicon-off" aria-hidden="true"> Logout  </span></a> </p>
+                   
 
 <div class="reportBody">
 
 
 {% include 'trackerreport/snippets/HC.html' %} <br>
 
+<form action="{% url 'fuel_report2' %}" method="post"> {% csrf_token %}
+	
+<span style="font-weight: bolder;"> Date From: </span>  <input type="date" name="from_date"> <span style="font-weight: bolder;"> Date To: </span> <input type="date" name="to_date">
+<input type="submit">
+</form>
+
 
 <table class="table table-bordered">
  <tr> 
  	<th> Reg. No </th>
  	<th> User Name  </th>
+ 	<th> Location </th>
  	<th> Fuel Consumed (Ltrs) </th>
+ 	<th> Fuel allocated (Ltrs) </th>
+ 	<th> Unused Fuel </th>
  	<th> Fuel per KM</th>
  	<th> Distance Covered (KM) </th>
 
 
  </tr>
- {% for v in vehicle_reports %}
+ {% for v in allReports %}
  <tr>
- 	<td> {{ v.Target_name}}  </td>
- 	<td> {{ v.Target_name}}  </td>
- 	<td> {{v.Fuel_consumption | floatformat:"0"}} ltrs</td>
- 	<td> {{v.Fuel_per_km}} ltrs</td>
- 	<td> {{v.Total_distance | floatformat:"0"}} km</td>
+ 	<td> {{ v.target_name}}  </td>
+ 	<td> {{ v.target_name}}  </td>
+ 	<td> {{v.location}}</td>
+ 	<td> {{v.fuel_consumption | floatformat:"0"}} ltrs</td>
+ 	<td> {{v.fuel_allocated | floatformat:"0"}} ltrs</td>
+ 	<td> {{v.fuel_allocated | floatformat:"0" | sub:v.fuel_consumption | floatformat:"0" }} ltrs  </td>
+ 	<td> {{v.fuel_per_km}} ltrs</td>
+ 	<td> {{v.distance_covered | floatformat:"0"}} km</td>
 </tr>
  {% endfor %}
 

@@ -1,0 +1,39 @@
+{% extends 'trackerreport/base.html' %}
+{% load staticfiles %}
+{% load mathfilters %}
+
+{% block title %} Distance Covered Report | Tracker Report {% endblock %}
+
+{% block content %}
+
+{% include 'trackerreport/snippets/nav.html' %}
+
+<div class="reportBody">
+
+{% include 'trackerreport/snippets/distance_covered.html' %} <br>
+
+<div style="background-color: #FFF; width: 100%;"> <span style="color: #AAAAAA; font-weight: bolder;"> Start Date: 2019-03-05 - End Date: 2019-03-05 </span></div> <br>
+
+<table class="table table-bordered">
+<tr>
+    <th> Reg No </th>
+ 	<th> Username </th>
+ 	<th> Location </th>
+ 	<th> Distance Covered </th>
+ 	<th> Distance Allocated </th>
+ 	<th> Uncovered Distance </th>
+ </tr>
+ {% for v in allReports %}
+ <tr>
+ 	<td> {{ v.target_name}}  </td>
+ 	<td> {{ v.target_name}}</td>
+ 	<td> {{v.location}}</td>
+ 	<td> {{ v.distance_covered | floatformat:"0"}} km</td>
+ 	<td> {{ v.distance_allocated | floatformat:"0"}} km</td>
+ 	<td> {{v.distance_allocated | floatformat:"0" | sub:v.distance_covered | floatformat:"0" }} ltrs  </td>
+ 
+</tr>
+ {% endfor %}
+</table>
+</div>
+{% endblock %}

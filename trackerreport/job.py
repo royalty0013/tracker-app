@@ -3,6 +3,7 @@ import json
 
 from django.utils import timezone
 from datetime import timedelta
+from dateutil.parser import parse
 
 from trackerreport.models import LoginHash, VehicleReport
 
@@ -59,7 +60,7 @@ def get_device_data(login_hash, start_date, end_date, upto):
 
 def save_record(record, login_hash, device_id, upto):
 	try:
-		old_rec = VehicleReport.objects.get(upto=upto,device_id=device_id)
+		old_rec = VehicleReport.objects.get(upto=upto,device_id=device_id, login_hash=login_hash)
 	except VehicleReport.DoesNotExist:		
 		new_rec = VehicleReport(
 			target_name = record['Target_name'],
@@ -67,6 +68,7 @@ def save_record(record, login_hash, device_id, upto):
 			top_speed = record['Top_speed'],
 			distance_covered = record['Total_distance'],
 			fuel_per_km = record['Fuel_per_km'],
+			location = record['Location'],
 			move_duration = record['Move_duration'],
 			stop_duration = record['Stop_duration'],
 			login_hash = login_hash,
@@ -87,5 +89,6 @@ def transform(device_history):
 	device['Top_speed'] = device_history['top_speed'].split(" ")[0]
 	device['Move_duration'] = device_history['move_duration']
 	device['Fuel_per_km'] = device_history['device']['fuel_per_km'] 
-	device['Stop_duration'] = device_history['device']['stop_duration']
+	device['Location'] = device_history['device']['object_owner'] 
+	device['Stop_duration'] = device_history['device']['stop_duration'] 
 	return device

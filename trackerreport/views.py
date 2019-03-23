@@ -1,11 +1,13 @@
 import requests
 import json
-
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django.contrib.auth import  logout
+from dateutil.parser import parse
 
-from trackerreport.models import LoginHash
+from trackerreport.models import LoginHash, VehicleReport
+# from .forms import DateForm
 
 
 def index(request):
@@ -13,20 +15,28 @@ def index(request):
 	return render(request, 'trackerreport/index.html', context)
 
 def fuel_report(request):
-	context = generate_report(request)
+	#context = generate_report(request)
+	context = {}
+	context['allReports'] = VehicleReport.objects.all()
 	return render(request, 'trackerreport/fuel_report.html', context)
 
 def summary_report(request):
-	context = generate_report(request)
+	#context = generate_report(request)
+	context = {}
+	context['allReports'] = VehicleReport.objects.all()
 	return render(request, 'trackerreport/summary_report.html', context)
 
 def movestat_report(request):
-	context = generate_report(request)
+	#context = generate_report(request)
+	context = {}
+	context['allReports'] = VehicleReport.objects.all()
 	return render(request, 'trackerreport/move_stat.html', context)
 
-def overspeed_report(request):
-	context = generate_report(request)
-	return render(request, 'trackerreport/overspeed.html', context)
+def distance_covered_report(request):
+	#context = generate_report(request)
+	context = {}
+	context['allReports'] = VehicleReport.objects.all()
+	return render(request, 'trackerreport/distance_covered.html', context)
 
 def login_api(username, password):
 	param = {'email': username, 'password':password}
@@ -64,54 +74,92 @@ def save_hash(login_hash, username):
 		add_hash = LoginHash(username=username, hash_token=login_hash)
 		add_hash.save()
 
+def logOut(request):
+	logout(request)
+	return HttpResponseRedirect(reverse('login_process'))
 
-def get_devices(request):
-	parameter = {'lang': 'en', 'user_api_hash':request.session['login_hash']}
-	url = "https://service.packet-v.com/api/get_devices"
-	rep = requests.get(url, params=parameter)
-	devices = rep.json()[0]['items']
-	devices_id = []
-	for d in devices:
-		devices_id.append(d['id'])
-	return devices_id
+def date_picker_range(request):
+	context = {}
+	from_date_object = parse(request.POST['from_date'])
+	from_date_object=from_date_object.date()
 
-def get_device_history(request, vehicle_id, start_date, end_date):
-	parameter = {'lang': 'en', 'user_api_hash':request.session['login_hash'], 'device_id': vehicle_id , 'from_date':start_date, 'from_time':'00:00:00', 'to_date':end_date, 'to_time':'23:59:59'}
-	url = "https://service.packet-v.com/api/get_history"
-	rep = requests.get(url, params=parameter)
-	devices_data = rep.json()
-	return devices_data
+	to_date_object = parse(request.POST['to_date'])
+	to_date_object=to_date_object.date()
 
-def get_device_data(request, start_date, end_date):
-	vehicle_reports = []
-	devices_id = get_devices(request)
-	for device_id in devices_id:
-		device_history = get_device_history(request, device_id, start_date, end_date)
-		vehicle_report = transform(device_history)
-		vehicle_reports.append(vehicle_report)
+	the_reports = VehicleReport.objects.filter(upto__range=(from_date_object, to_date_object), login_hash=request.session['login_hash'])
+	context['allReports'] = aggregator(the_reports)
+	return render(request, 'trackerreport/fuel_report.html', context)
 
-	return vehicle_reports
 
-def transform(device_history):
-	device = {}
-	#print(device_history)
-	device['Fuel_consumption'] = device_history['fuel_consumption'].split(" ")[0]
+def aggregator(the_reports):
+ 	all_devices = []
+ 	for rep in the_reports:
+ 		temp = {'fuel_consumption': 0, 'distance_covered':0, 'target_name': rep.target_name}
+ 		for device in the_reports:
+ 			if rep.login_hash == device.login_hash and rep.device_id == device.device_id:
+ 				temp['fuel_consumption'] = temp['fuel_consumption'] + device.fuel_consumption
+ 				temp['distance_covered'] = temp['distance_covered'] + device.distance_covered
+ 		all_devices.append(temp)
+ 	return all_devices
+	
 
-	device['Target_name'] = device_history['device']['name']
-	device['Total_distance'] = device_history['distance_sum'].split(" ")[0]
-	device['Move_distance'] = device_history['move_duration']
-	device['Stop_distance'] = device_history['stop_duration']
-	device['Top_speed'] = device_history['top_speed']
-	device['Move_duration'] = device_history['move_duration']
-	device['Fuel_per_km'] = device_history['device']['fuel_per_km'] 
-	device['Stop_duration'] = device_history['device']['stop_duration']
-	return device
 
-def generate_report(request):
-	reports = {}
-	reports['vehicle_reports'] = get_device_data(request, '2019-03-01', '2019-03-06')
+# def datePicker(request):
+# 	context = {}
+# 	date_form = DateForm()
+# 	context['date_picker_form'] = date_form
+# 	return render(request, 'trackerreport/fuel_report.html', context)
 
-	return reports
+
+
+
+# def get_devices(request):
+# 	parameter = {'lang': 'en', 'user_api_hash':request.session['login_hash']}
+# 	url = "https://service.packet-v.com/api/get_devices"
+# 	rep = requests.get(url, params=parameter)
+# 	devices = rep.json()[0]['items']
+# 	devices_id = []
+# 	for d in devices:
+# 		devices_id.append(d['id'])
+# 	return devices_id
+
+# def get_device_history(request, vehicle_id, start_date, end_date):
+# 	parameter = {'lang': 'en', 'user_api_hash':request.session['login_hash'], 'device_id': vehicle_id , 'from_date':start_date, 'from_time':'00:00:00', 'to_date':end_date, 'to_time':'23:59:59'}
+# 	url = "https://service.packet-v.com/api/get_history"
+# 	rep = requests.get(url, params=parameter)
+# 	devices_data = rep.json()
+# 	return devices_data
+
+# def get_device_data(request, start_date, end_date):
+# 	vehicle_reports = []
+# 	devices_id = get_devices(request)
+# 	for device_id in devices_id:
+# 		device_history = get_device_history(request, device_id, start_date, end_date)
+# 		vehicle_report = transform(device_history)
+# 		vehicle_reports.append(vehicle_report)
+
+# 	return vehicle_reports
+
+# def transform(device_history):
+# 	device = {}
+# 	#print(device_history)
+# 	device['Fuel_consumption'] = device_history['fuel_consumption'].split(" ")[0]
+
+# 	device['Target_name'] = device_history['device']['name']
+# 	device['Total_distance'] = device_history['distance_sum'].split(" ")[0]
+# 	device['Move_distance'] = device_history['move_duration']
+# 	device['Stop_distance'] = device_history['stop_duration']
+# 	device['Top_speed'] = device_history['top_speed']
+# 	device['Move_duration'] = device_history['move_duration']
+# 	device['Fuel_per_km'] = device_history['device']['fuel_per_km'] 
+# 	device['Stop_duration'] = device_history['device']['stop_duration']
+# 	return device
+
+# def generate_report(request):
+# 	reports = {}
+# 	reports['vehicle_reports'] = get_device_data(request, '2019-03-01', '2019-03-06')
+
+# 	return reports
 
 
 

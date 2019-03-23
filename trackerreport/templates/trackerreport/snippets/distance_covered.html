@@ -13,13 +13,13 @@ Highcharts.chart('container1', {
     type: 'bar'
   },
   title: {
-    text: 'OVERSPEED REPORT'
+    text: 'DISTANCE COVERED REPORT'
   },
   subtitle: {
     text: ''
   },
   xAxis: {
-    categories: ['003753 ZM - Benjamin', 'BAF 2429 ZM - Musoni', 'BAF 2434 ZM - Nemon', 'BAH 6659 ZM - Samson', 'BAF 2256 ZM - James'],
+    categories: [{% for v in allReports %} '{{v.target_name}}', {% endfor %}],
     title: {
       text: null
     }
@@ -49,7 +49,7 @@ Highcharts.chart('container1', {
     align: 'right',
     verticalAlign: 'top',
     x: -40,
-    y: 80,
+    y: 15,
     floating: true,
     borderWidth: 1,
     backgroundColor: ((Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'),
@@ -59,8 +59,12 @@ Highcharts.chart('container1', {
     enabled: false
   },
   series: [{
-    name: 'INSTANCE OF OVERSPEEDING',
-    data: [107, 31, 635, 203, 2]
+    name: 'Distance Covered',
+    data: [{% for v in allReports %} {{v.distance_covered | floatformat:"0"}},  {% endfor %}]
+  },
+  {
+    name: 'Distance Allocated',
+    data: [{% for v in allReports %} {{v.distance_allocated | floatformat:"0"}},  {% endfor %}]
   }]
 });
 

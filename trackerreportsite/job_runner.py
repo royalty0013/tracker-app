@@ -11,8 +11,8 @@ sys.path.append(path_append)
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'trackerreportsite.settings')
 django.setup()
 
-# to run the job, just run python3 path/to/this/file/ e.g python3 job_runner.py
-# This can also be run via cron and should be run via cron
+# Run python3 path/to/this/file/ e.g python3 job_runner.py
+# Run a cronjob with the path specified above 
 
 from django.utils import timezone
 from trackerreport.job import run_job
