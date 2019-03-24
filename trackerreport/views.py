@@ -86,22 +86,29 @@ def date_picker_range(request):
 	to_date_object = parse(request.POST['to_date'])
 	to_date_object=to_date_object.date()
 
+	the_devices = VehicleReport.objects.filter(upto__range=(from_date_object, to_date_object), login_hash=request.session['login_hash']).values('target_name').distinct()
 	the_reports = VehicleReport.objects.filter(upto__range=(from_date_object, to_date_object), login_hash=request.session['login_hash'])
-	context['allReports'] = aggregator(the_reports)
+	context['allReports'] = aggregator(the_reports, the_devices)
+	print()
 	return render(request, 'trackerreport/fuel_report.html', context)
 
 
-def aggregator(the_reports):
- 	all_devices = []
- 	for rep in the_reports:
- 		temp = {'fuel_consumption': 0, 'distance_covered':0, 'target_name': rep.target_name}
- 		for device in the_reports:
- 			if rep.login_hash == device.login_hash and rep.device_id == device.device_id:
- 				temp['fuel_consumption'] = temp['fuel_consumption'] + device.fuel_consumption
- 				temp['distance_covered'] = temp['distance_covered'] + device.distance_covered
- 		all_devices.append(temp)
- 	return all_devices
-	
+def aggregator(the_reports, the_devices):
+	"""the_devices is a distinct list of dict containing stuffs like {'target_name': 'ACH9998'}
+	which we loop through then create a temp dict and for each of the device we loop through the_reports
+	looking for the target_name(device) in the reports so we can add the fuel and the distance covered
+	before we now append temp to all_devices list and return it
+	"""	
+	all_devices = []
+	for rep in the_devices:
+		temp = {'fuel_consumption': 0, 'distance_covered':0, 'target_name': rep['target_name']}
+		for device in the_reports:
+			if rep['target_name'] == device.target_name:
+				temp['fuel_consumption'] = temp['fuel_consumption'] + device.fuel_consumption
+				temp['distance_covered'] = temp['distance_covered'] + device.distance_covered
+		all_devices.append(temp)
+	return all_devices
+
 
 
 # def datePicker(request):
