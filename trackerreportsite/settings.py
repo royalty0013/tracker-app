@@ -25,7 +25,7 @@ SECRET_KEY = '8thr6j!-w8y8d0q76&dybr6-*cmb&56evr+k^x8(eiymr%b1!6'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -81,7 +81,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'trackerReport',
         'USER' : 'root',
-        'PASSWORD': '',
+        'PASSWORD': 'Techno1og1es',
         'HOST': 'localhost',
 
     }
