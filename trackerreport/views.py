@@ -5,6 +5,8 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib.auth import  logout
 from dateutil.parser import parse
+import datetime
+from email_split import email_split
 
 from trackerreport.models import LoginHash, VehicleReport
 # from .forms import DateForm
@@ -17,25 +19,28 @@ def index(request):
 def fuel_report(request):
 	#context = generate_report(request)
 	context = {}
-	context['allReports'] = VehicleReport.objects.all()
+	yesterday = datetime.date.today() - datetime.timedelta(days=1)
+	context['allReports'] = VehicleReport.objects.filter(upto__gte=(yesterday), login_hash=request.session['login_hash'])
 	return render(request, 'trackerreport/fuel_report.html', context)
 
 def summary_report(request):
 	#context = generate_report(request)
 	context = {}
-	context['allReports'] = VehicleReport.objects.all()
+	yesterday = datetime.date.today() - datetime.timedelta(days=1)
+	context['allReports'] = VehicleReport.objects.filter(upto__gte=(yesterday), login_hash=request.session['login_hash'])
 	return render(request, 'trackerreport/summary_report.html', context)
 
-def movestat_report(request):
-	#context = generate_report(request)
-	context = {}
-	context['allReports'] = VehicleReport.objects.all()
-	return render(request, 'trackerreport/move_stat.html', context)
+# def movestat_report(request):
+# 	#context = generate_report(request)
+# 	context = {}
+# 	context['allReports'] = VehicleReport.objects.all()
+# 	return render(request, 'trackerreport/move_stat.html', context)
 
 def distance_covered_report(request):
 	#context = generate_report(request)
 	context = {}
-	context['allReports'] = VehicleReport.objects.all()
+	yesterday = datetime.date.today() - datetime.timedelta(days=1)
+	context['allReports'] = VehicleReport.objects.filter(upto__gte=(yesterday), login_hash=request.session['login_hash'])
 	return render(request, 'trackerreport/distance_covered.html', context)
 
 def login_api(username, password):
@@ -78,7 +83,7 @@ def logOut(request):
 	logout(request)
 	return HttpResponseRedirect(reverse('login_process'))
 
-def date_picker_range(request):
+def fuelusage_date_range(request):
 	context = {}
 	from_date_object = parse(request.POST['from_date'])
 	from_date_object=from_date_object.date()
@@ -89,8 +94,43 @@ def date_picker_range(request):
 	the_devices = VehicleReport.objects.filter(upto__range=(from_date_object, to_date_object), login_hash=request.session['login_hash']).values('target_name').distinct()
 	the_reports = VehicleReport.objects.filter(upto__range=(from_date_object, to_date_object), login_hash=request.session['login_hash'])
 	context['allReports'] = aggregator(the_reports, the_devices)
-	print()
+	context['start_date'] = from_date_object
+	context['to_date_object'] = to_date_object
+	#print()
 	return render(request, 'trackerreport/fuel_report.html', context)
+
+def summary_date_range(request):
+	context = {}
+	from_date_object = parse(request.POST['from_date'])
+	from_date_object=from_date_object.date()
+
+	to_date_object = parse(request.POST['to_date'])
+	to_date_object=to_date_object.date()
+
+	the_devices = VehicleReport.objects.filter(upto__range=(from_date_object, to_date_object), login_hash=request.session['login_hash']).values('target_name').distinct()
+	the_reports = VehicleReport.objects.filter(upto__range=(from_date_object, to_date_object), login_hash=request.session['login_hash'])
+	context['allReports'] = aggregator(the_reports, the_devices)
+	context['start_date'] = from_date_object
+	context['to_date_object'] = to_date_object
+	#print()
+	return render(request, 'trackerreport/summary_report.html', context)
+
+
+def distance_date_range(request):
+	context = {}
+	from_date_object = parse(request.POST['from_date'])
+	from_date_object=from_date_object.date()
+
+	to_date_object = parse(request.POST['to_date'])
+	to_date_object=to_date_object.date()
+
+	the_devices = VehicleReport.objects.filter(upto__range=(from_date_object, to_date_object), login_hash=request.session['login_hash']).values('target_name').distinct()
+	the_reports = VehicleReport.objects.filter(upto__range=(from_date_object, to_date_object), login_hash=request.session['login_hash'])
+	context['allReports'] = aggregator(the_reports, the_devices)
+	context['start_date'] = from_date_object
+	context['to_date_object'] = to_date_object
+	#print()
+	return render(request, 'trackerreport/distance_covered.html', context)
 
 
 def aggregator(the_reports, the_devices):
@@ -106,6 +146,10 @@ def aggregator(the_reports, the_devices):
 			if rep['target_name'] == device.target_name:
 				temp['fuel_consumption'] = temp['fuel_consumption'] + device.fuel_consumption
 				temp['distance_covered'] = temp['distance_covered'] + device.distance_covered
+				temp['top_speed'] = device.top_speed
+				temp['location'] = device.location
+				temp['distance_allocated'] = device.distance_allocated
+				temp['fuel_allocated'] = device.fuel_allocated
 		all_devices.append(temp)
 	return all_devices
 

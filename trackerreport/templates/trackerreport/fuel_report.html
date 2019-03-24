@@ -10,7 +10,7 @@
 
 {% include 'trackerreport/snippets/nav.html' %}
 
-<p style="color: #000066; font-weight: bolder; display: inline-block;"> Welcome {{request.session.client_name | title }} !!! </p>
+<p style="color: #000066; font-weight: bolder; display: inline-block;"> Welcome {{request.session.client_name | title }} </p>
 
 <p style="color: #000066; font-weight: bolder; float: right;">  <a href="{% url 'log_out' %}"> <span class="glyphicon glyphicon-off" aria-hidden="true"> Logout  </span></a> </p>
                    
@@ -29,26 +29,30 @@
 
 <table class="table table-bordered">
  <tr> 
+ 	<th> Start Date </th>
+ 	<th> End Date </th>
  	<th> Reg. No </th>
  	<th> User Name  </th>
  	<th> Location </th>
  	<th> Fuel Consumed (Ltrs) </th>
  	<th> Fuel allocated (Ltrs) </th>
  	<th> Unused Fuel </th>
- 	<th> Fuel per KM</th>
+ 	<!-- <th> Fuel per KM</th> -->
  	<th> Distance Covered (KM) </th>
 
 
  </tr>
  {% for v in allReports %}
  <tr>
+ 	<td>{{ v.upto }} {{ start_date }} </td>
+ 	<td>{{ v.upto }} {{ to_date_object }} </td>
  	<td> {{ v.target_name}}  </td>
  	<td> {{ v.target_name}}  </td>
  	<td> {{v.location}}</td>
  	<td> {{v.fuel_consumption | floatformat:"0"}} ltrs</td>
  	<td> {{v.fuel_allocated | floatformat:"0"}} ltrs</td>
  	<td> {{v.fuel_allocated | floatformat:"0" | sub:v.fuel_consumption | floatformat:"0" }} ltrs  </td>
- 	<td> {{v.fuel_per_km}} ltrs</td>
+ 	<!-- <td> {{v.fuel_per_km}} ltrs</td> -->
  	<td> {{v.distance_covered | floatformat:"0"}} km</td>
 </tr>
  {% endfor %}

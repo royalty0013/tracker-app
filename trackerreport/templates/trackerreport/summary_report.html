@@ -11,25 +11,31 @@
 
 {% include 'trackerreport/snippets/summarygraph.html' %} <br>
 
+<form action="{% url 'summary_report2' %}" method="post"> {% csrf_token %}
+	
+<span style="font-weight: bolder;"> Date From: </span>  <input type="date" name="from_date"> <span style="font-weight: bolder;"> Date To: </span> <input type="date" name="to_date">
+<input type="submit">
+</form>
+
 <table class="table table-bordered">
  <tr> 
- 	<th> Start Time </th>
- 	<th> End Time </th>
+ 	<th> Start Date </th>
+ 	<th> End Date </th>
  	<th> Reg. No </th>
  	<th> Total Mileage(km)</th>
  	<th> Top speed(kph)</th>
- 	<th> Overspeed(km) </th>
+ 	<th> Location </th>
  	<th> Fuel Consumption(ltrs)</th>
 
  </tr>
  {% for v in allReports %}
  <tr>
- 	<td> 2019-03-01 </td>
- 	<td> 2019-03-05 </td>
+ 	<td>{{ v.upto }} {{ start_date }} </td>
+ 	<td>{{ v.upto }} {{ to_date_object }} </td>
  	<td> {{ v.target_name}}  </td>
  	<td> {{v.distance_covered | floatformat:"0"}} km </td>
  	<td> {{v.top_speed | floatformat:"0" }} </td>
- 	<td> {{v.overspeed | floatformat:"0" }} </td>
+ 	<td> {{v.location}} </td>
  	<td> {{v.fuel_consumption | floatformat:"0"}} ltrs </td>
  {% endfor %}
 </tr>

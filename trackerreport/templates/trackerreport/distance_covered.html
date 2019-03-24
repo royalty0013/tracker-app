@@ -12,10 +12,17 @@
 
 {% include 'trackerreport/snippets/distance_covered.html' %} <br>
 
-<div style="background-color: #FFF; width: 100%;"> <span style="color: #AAAAAA; font-weight: bolder;"> Start Date: 2019-03-05 - End Date: 2019-03-05 </span></div> <br>
+ <form action="{% url 'distance_covered_report2' %}" method="post"> {% csrf_token %}
+	
+<span style="font-weight: bolder;"> Date From: </span>  <input type="date" name="from_date"> <span style="font-weight: bolder;"> Date To: </span> <input type="date" name="to_date">
+<input type="submit">
+
+</form>
 
 <table class="table table-bordered">
 <tr>
+	<th> Start Date </th>
+ 	<th> End Date </th>
     <th> Reg No </th>
  	<th> Username </th>
  	<th> Location </th>
@@ -25,6 +32,9 @@
  </tr>
  {% for v in allReports %}
  <tr>
+ 	<!-- <td> {{ start_date }} - {{ to_date_object }} </td> -->
+ 	<td>{{ v.upto }} {{ start_date }} </td>
+ 	<td>{{ v.upto }} {{ to_date_object }} </td>
  	<td> {{ v.target_name}}  </td>
  	<td> {{ v.target_name}}</td>
  	<td> {{v.location}}</td>
