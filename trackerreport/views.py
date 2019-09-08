@@ -20,6 +20,7 @@ def fuel_report(request):
 	#context = generate_report(request)
 	context = {}
 	yesterday = datetime.date.today() - datetime.timedelta(days=1)
+	context['yesterday'] = yesterday
 	all_report = VehicleReport.objects.filter(upto__gte=(yesterday), login_hash=request.session['login_hash'])
 	page = request.GET.get('page', 1)
 
