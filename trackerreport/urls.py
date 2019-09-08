@@ -3,7 +3,7 @@ from trackerreport import views
 
 urlpatterns = [
     url(r'^$', views.login_process, name='login_process' ),
-    url(r'^fuel_report/$', views.fuel_report, name='fuel_report' ),
+    url(r'^dashboard/$', views.fuel_report, name='dashboard' ),
     url(r'^date_range/$', views.fuelusage_date_range, name='fuel_report2' ),
     url(r'^summary_report/$', views.summary_report, name='summary_report' ),
     url(r'^summary_date_range/$', views.summary_date_range, name='summary_report2' ),

@@ -7,7 +7,7 @@ from django.contrib.auth import  logout
 from dateutil.parser import parse
 import datetime
 from email_split import email_split
-
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from trackerreport.models import LoginHash, VehicleReport
 # from .forms import DateForm
 
@@ -20,15 +20,25 @@ def fuel_report(request):
 	#context = generate_report(request)
 	context = {}
 	yesterday = datetime.date.today() - datetime.timedelta(days=1)
-	context['allReports'] = VehicleReport.objects.filter(upto__gte=(yesterday), login_hash=request.session['login_hash'])
-	return render(request, 'trackerreport/fuel_report.html', context)
+	all_report = VehicleReport.objects.filter(upto__gte=(yesterday), login_hash=request.session['login_hash'])
+	page = request.GET.get('page', 1)
+
+	paginator = Paginator(all_report, 10)
+	try:
+		context['allReports'] = paginator.page(page)
+	except PageNotAnInteger:
+		context['allReports'] = paginator.page(1)
+	except EmptyPage:
+		context['allReports'] = paginator.page(paginator.num_pages)
+
+	return render(request, 'trackerreport/chartjs.html', context)
 
 def summary_report(request):
 	#context = generate_report(request)
 	context = {}
 	yesterday = datetime.date.today() - datetime.timedelta(days=1)
 	context['allReports'] = VehicleReport.objects.filter(upto__gte=(yesterday), login_hash=request.session['login_hash'])
-	return render(request, 'trackerreport/summary_report.html', context)
+	return render(request, 'trackerreport/chartjs.html', context)
 
 # def movestat_report(request):
 # 	#context = generate_report(request)
@@ -67,8 +77,9 @@ def login_process(request):
 			request.session['login_hash'] = auth['user_api_hash']
 			request.session['client_name'] = username
 
+
 			save_hash(auth['user_api_hash'], username)
-			return HttpResponseRedirect("/fuel_report/")
+			return HttpResponseRedirect("/dashboard/")
     
 	return render(request, 'trackerreport/index.html', context)
 
@@ -85,19 +96,39 @@ def logOut(request):
 
 def fuelusage_date_range(request):
 	context = {}
-	from_date_object = parse(request.POST['from_date'])
-	from_date_object=from_date_object.date()
+	if "from_date" in request.GET:
+		from_date_object = parse(request.GET['from_date'])
+		from_date_object=from_date_object.date()
 
-	to_date_object = parse(request.POST['to_date'])
-	to_date_object=to_date_object.date()
+		to_date_object = parse(request.GET['to_date'])
+		to_date_object=to_date_object.date()
+		context = {"from_date": from_date_object.isoformat(), "to_date": to_date_object.isoformat()}
+	elif request.POST:
+		from_date_object = parse(request.POST['from_date'])
+		from_date_object=from_date_object.date()
+
+		to_date_object = parse(request.POST['to_date'])
+		to_date_object=to_date_object.date()
+
+		context = {"from_date": from_date_object.isoformat(), "to_date": to_date_object.isoformat()}
 
 	the_devices = VehicleReport.objects.filter(upto__range=(from_date_object, to_date_object), login_hash=request.session['login_hash']).values('target_name').distinct()
 	the_reports = VehicleReport.objects.filter(upto__range=(from_date_object, to_date_object), login_hash=request.session['login_hash'])
-	context['allReports'] = aggregator(the_reports, the_devices)
 	context['start_date'] = from_date_object
 	context['to_date_object'] = to_date_object
+	all_report = aggregator(the_reports, the_devices)
+
+	page = request.GET.get('page', 1)
+	paginator = Paginator(all_report, 10)
+
+	try:
+		context['allReports'] = paginator.page(page)
+	except PageNotAnInteger:
+		context['allReports'] = paginator.page(1)
+	except EmptyPage:
+		context['allReports'] = paginator.page(paginator.num_pages)
 	#print()
-	return render(request, 'trackerreport/fuel_report.html', context)
+	return render(request, 'trackerreport/chartjs.html', context)
 
 def summary_date_range(request):
 	context = {}
@@ -130,7 +161,7 @@ def distance_date_range(request):
 	context['start_date'] = from_date_object
 	context['to_date_object'] = to_date_object
 	#print()
-	return render(request, 'trackerreport/distance_covered.html', context)
+	return render(request, 'trackerreport/chartjs.html', context)
 
 
 def aggregator(the_reports, the_devices):
@@ -150,8 +181,11 @@ def aggregator(the_reports, the_devices):
 				temp['location'] = device.location
 				temp['distance_allocated'] = device.distance_allocated
 				temp['fuel_allocated'] = device.fuel_allocated
+				temp['fuel_economy'] = device.fuel_economy
 		all_devices.append(temp)
 	return all_devices
+
+
 
 
 

@@ -1,0 +1,275 @@
+{% extends "trackerreport/base_site.html" %}
+
+{% block title %} Dashboard {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+{% endblock stylesheets %}
+
+{% block content %}
+
+  <div class="right_col" role="main">
+    <div class="">
+      <div class="page-title">
+
+        <div class="title_left">
+          <h3>Tracker Dashboard <small>{{ allReports.upto }} {{ start_date }} - {{ allReports.upto }} {{ to_date_object }}</small></h3>
+        </div>
+
+        <div class="title_right">
+          <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+            <div class="input-group">
+              <form action="{% url 'fuel_report2' %}" method="post"> {% csrf_token %}
+  
+<span style="font-weight: bolder;"> Date From: </span>  <input type="date" name="from_date"> <span style="font-weight: bolder;"> Date To: &nbsp&nbsp&nbsp&nbsp</span> <input type="date" name="to_date">
+<input type="submit">
+</form>
+              <!-- <input type="text" class="form-control" placeholder="Search for...">
+              <span class="input-group-btn">
+                <button class="btn btn-default" type="button">Go!</button>
+              </span> -->
+            </div> 
+        
+
+          </div>
+        </div>
+      </div>
+
+      <div class="clearfix"></div>
+
+      <div class="row">
+        <div class="col-md-6 col-sm-6 col-xs-12">
+          <div class="x_panel">
+            <div class="x_title">
+              <h2>FUEL CONSUMPTION</h2>
+              <ul class="nav navbar-right panel_toolbox">
+                <!-- <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                </li> -->
+                <!-- <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                  <ul class="dropdown-menu" role="menu">
+                    <li><a href="#">Settings 1</a>
+                    </li>
+                    <li><a href="#">Settings 2</a>
+                    </li>
+                  </ul>
+                </li> -->
+                <!-- <li><a class="close-link"><i class="fa fa-close"></i></a>
+                </li> -->
+              </ul>
+              <div class="clearfix"></div>
+            </div>
+            <div class="x_content1">
+               <!-- <canvas id="mybarChart"></canvas>  -->
+                {% include 'trackerreport/snippets/HC3.html' %}
+                
+            </div>
+          </div> 
+          <!-- {% include 'trackerreport/snippets/stoptime.html' %} -->
+        </div>
+
+        <div class="col-md-6 col-sm-6 col-xs-12">
+          <div class="x_panel">
+            <div class="x_title">
+              <h2>TOTAL DISTANCE COVERED</h2>
+              <ul class="nav navbar-right panel_toolbox">
+                <!-- <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                </li> -->
+                <li class="dropdown">
+                  <!-- <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                  <ul class="dropdown-menu" role="menu">
+                    <li><a href="#">Settings 1</a>
+                    </li>
+                    <li><a href="#">Settings 2</a>
+                    </li>
+                  </ul> -->
+                </li>
+                <!-- <li><a class="close-link"><i class="fa fa-close"></i></a>
+                </li> -->
+              </ul>
+              <div class="clearfix"></div>
+            </div>
+            <div class="x_content1">
+              <!-- <canvas id="mybarChart"></canvas> -->
+            {% include 'trackerreport/snippets/HC4.html' %}
+            </div>
+          </div>
+        </div>
+
+      </div> 
+      <div class="clearfix"></div>
+      <div class="row">
+        <div class="col-md-6 col-sm-6 col-xs-12">
+          <div class="x_panel">
+            <div class="x_title">
+              <h2>TOP SPEED</h2>
+              <ul class="nav navbar-right panel_toolbox">
+              <!--   <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                </li> -->
+                <li class="dropdown">
+                  <!-- <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                  <ul class="dropdown-menu" role="menu">
+                    <li><a href="#">Settings 1</a>
+                    </li>
+                    <li><a href="#">Settings 2</a>
+                    </li>
+                  </ul> -->
+                </li>
+                <!-- <li><a class="close-link"><i class="fa fa-close"></i></a>
+                </li> -->
+              </ul>
+              <div class="clearfix"></div>
+            </div>
+            <div class="x_content1">
+            <!--   <canvas id="canvasRadar"></canvas> -->
+             {% include 'trackerreport/snippets/HC5.html' %}
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-sm-6 col-xs-12">
+          <div class="x_panel">
+            <div class="x_title">
+              <h2>FUEL ECONOMY</h2>
+              <ul class="nav navbar-right panel_toolbox">
+              <!--   <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                </li -->
+                <li class="dropdown">
+                  <!-- <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a> -->
+                  <!-- <ul class="dropdown-menu" role="menu">
+                    <li><a href="#">Settings 1</a>
+                    </li>
+                    <li><a href="#">Settings 2</a>
+                    </li>
+                  </ul> -->
+                </li>
+                <!-- <li><a class="close-link"><i class="fa fa-close"></i></a>
+                </li> -->
+              </ul>
+              <div class="clearfix"></div>
+            </div>
+            <div class="x_content1">
+              <!-- <canvas id="canvasDoughnut"></canvas> -->
+              {% include 'trackerreport/snippets/HC6.html' %}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="clearfix"></div>
+      <div class="row">
+        <table class="table table-bordered">
+ <tr id="alt_color"> 
+  <th> Start Date </th>
+  <th> End Date </th>
+  <th> Reg. No </th>
+  <th> User Name  </th>
+  <!-- <th> Location </th> -->
+  <th> Fuel Consumption (Ltrs) </th>
+  <!-- <th> Unused Fuel </th> -->
+  <th> Distance Covered (KM) </th>
+  <th> Fuel Economy (Ltrs) </th>
+  <th> Top Speed (KM) </th>
+ </tr>
+
+  {% for v in allReports %}
+  <tr>
+    <td>{{ v.upto }} {{ start_date }} </td>
+    <td>{{ v.upto }} {{ to_date_object }} </td>
+    <td> {{ v.target_name}}  </td>
+    <td> {{ v.target_name}}  </td>
+    <td> {{v.fuel_consumption | floatformat:"2"}} ltrs</td>
+    <td> {{v.distance_covered | floatformat:"2"}} km</td>
+    <td> {{v.fuel_economy | floatformat:"2"}} ltrs</td>
+    <td> {{v.top_speed | floatformat:"2"}} km </td>
+  </tr>
+  {% endfor %}
+</table>
+{% if allReports.has_other_pages %}
+  <ul class="pagination">
+    {% if allReports.has_previous %}
+      <li><a href="?page={{ allReports.previous_page_number }}&from_date={{ from_date }}&to_date={{ to_date }}">&laquo;</a></li>
+    {% else %}
+      <li class="disabled"><span>&laquo;</span></li>
+    {% endif %}
+
+    {% for i in allReports.paginator.page_range %}
+      {% if allReports.number == i %}
+        <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+      {% else %}
+      <li><a href="?page={{ i }}&from_date={{ from_date }}&to_date={{ to_date }}">{{ i }}</a></li>
+      {% endif %}
+    {% endfor %}
+
+    {% if allReports.has_next %}
+      <li><a href="?page={{ allReports.next_page_number }}&from_date={{ from_date }}&to_date={{ to_date }}">&raquo;</a></li>
+      {% else %}
+      <li class="disabled"><span>&raquo;</span></li>
+    {% endif %}
+
+  </ul>
+{% endif %}
+
+        <!-- <div class="col-md-6 col-sm-6 col-xs-12">
+          <div class="x_panel">
+            <div class="x_title">
+              <h2>Pie Graph Chart <small>Sessions</small></h2>
+              <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                </li>
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                  <ul class="dropdown-menu" role="menu">
+                    <li><a href="#">Settings 1</a>
+                    </li>
+                    <li><a href="#">Settings 2</a>
+                    </li>
+                  </ul>
+                </li>
+                <li><a class="close-link"><i class="fa fa-close"></i></a>
+                </li>
+              </ul>
+              <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+              <canvas id="pieChart"></canvas> -->
+            <!--  {% include 'trackerreport/snippets/HC7.html' %} -->
+          <!--   </div> -->
+         <!--  </div> -->
+       <!--  </div> -->
+
+        <!-- <div class="col-md-6 col-sm-6 col-xs-12">
+          <div class="x_panel">
+            <div class="x_title">
+              <h2>Pie Area Graph <small>Sessions</small></h2>
+              <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                </li>
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                  <ul class="dropdown-menu" role="menu">
+                    <li><a href="#">Settings 1</a>
+                    </li>
+                    <li><a href="#">Settings 2</a>
+                    </li>
+                  </ul>
+                </li>
+                <li><a class="close-link"><i class="fa fa-close"></i></a>
+                </li>
+              </ul>
+              <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+               <canvas id="polarArea"></canvas> -->
+              <!-- {% include 'trackerreport/snippets/HC8.html' %} -->
+           <!--  </div> -->
+         <!--  </div>  -->
+        <!-- </div> -->
+    </div>
+    </div>
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super }}
+     <!-- Chart.js -->
+    <script src="/static/vendors/Chart.js/dist/Chart.min.js"></script>
+{% endblock javascripts %}

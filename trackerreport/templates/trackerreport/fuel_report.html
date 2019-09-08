@@ -19,6 +19,7 @@
 
 
 {% include 'trackerreport/snippets/HC.html' %} <br>
+{% include 'trackerreport/snippets/HC3.html' %} <br>
 
 <form action="{% url 'fuel_report2' %}" method="post"> {% csrf_token %}
 	
@@ -36,7 +37,7 @@
  	<th> Location </th>
  	<th> Fuel Consumed (Ltrs) </th>
  	<th> Fuel allocated (Ltrs) </th>
- 	<th> Unused Fuel </th>
+ 	<!-- <th> Unused Fuel </th> -->
  	<!-- <th> Fuel per KM</th> -->
  	<th> Distance Covered (KM) </th>
 
@@ -51,7 +52,7 @@
  	<td> {{v.location}}</td>
  	<td> {{v.fuel_consumption | floatformat:"0"}} ltrs</td>
  	<td> {{v.fuel_allocated | floatformat:"0"}} ltrs</td>
- 	<td> {{v.fuel_allocated | floatformat:"0" | sub:v.fuel_consumption | floatformat:"0" }} ltrs  </td>
+ 	<!-- <td> {{v.fuel_allocated | floatformat:"0" | sub:v.fuel_consumption | floatformat:"0" }} ltrs  </td> -->
  	<!-- <td> {{v.fuel_per_km}} ltrs</td> -->
  	<td> {{v.distance_covered | floatformat:"0"}} km</td>
 </tr>

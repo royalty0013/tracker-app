@@ -3,7 +3,7 @@ from django.db import models
 class VehicleReport(models.Model):
 	device_id = models.IntegerField(null=True)
 	login_hash = models.TextField(null=True)
-	target_name = models.CharField(max_length=50)
+	target_name = models.CharField(max_length=100)
 	distance_covered = models.FloatField(default=0, null=True)
 	fuel_consumption = models.FloatField(default=0, null=True)
 	fuel_allocated = models.FloatField(default=0)
@@ -15,6 +15,7 @@ class VehicleReport(models.Model):
 	stop_duration = models.CharField(max_length=100, blank=True, null=True)
 	move_at = models.CharField(max_length=100, blank=True, null=True)
 	overspeed = models.FloatField(null=True, default=0)
+	fuel_economy = models.FloatField(null=True, default=0)
 	upto = models.DateField(null=True)
 	added = models.DateTimeField(auto_now_add=True)
 

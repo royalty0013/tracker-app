@@ -71,6 +71,7 @@ def save_record(record, login_hash, device_id, upto):
 			location = record['Location'],
 			move_duration = record['Move_duration'],
 			stop_duration = record['Stop_duration'],
+			fuel_economy = record['Fuel_economy'],
 			login_hash = login_hash,
 			device_id = device_id,
 			upto = upto.date()
@@ -90,5 +91,14 @@ def transform(device_history):
 	device['Move_duration'] = device_history['move_duration']
 	device['Fuel_per_km'] = device_history['device']['fuel_per_km'] 
 	device['Location'] = device_history['device']['object_owner'] 
-	device['Stop_duration'] = device_history['device']['stop_duration'] 
+	device['Stop_duration'] = device_history['device']['stop_duration']
+	fuel = device_history['fuel_consumption'].split(" ")[0]
+	distance = device_history['distance_sum'].split(" ")[0] 
+	fuel = float(fuel)
+	distance = float(distance)
+	try: 
+		device['Fuel_economy'] = fuel / distance * 100
+	except ZeroDivisionError:
+		device['Fuel_economy'] = 0
+	# device['Fuel_economy'] = device_history['fuel_consumption'].split(" ")[0] / device_history['distance_sum'].split(" ")[0] * 100
 	return device
