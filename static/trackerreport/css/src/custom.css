@@ -144,7 +144,7 @@ html , body{
     padding: 0 0 4px 0
 }
 .left_col {
-    background: #2A3F54
+    background: #0000A0
 }
 .nav-sm .container.body .col-md-3.left_col {
     min-height: 100%;
@@ -356,9 +356,9 @@ body .container.body .right_col {
 .nav_title {
     width: 230px;
     float: left;
-    background: #2A3F54;
+    background: #0000A0;
     border-radius: 0;
-    height: 57px
+    height: 57px;
 }
 @media (max-width: 991px) {
     .nav-md .container.body .right_col,
@@ -488,7 +488,7 @@ body .container.body .right_col {
 }
 body {
     color: #73879C;
-    background: #2A3F54;
+    background: #0000A0;
     font-family: "Helvetica Neue", Roboto, Arial, "Droid Sans", sans-serif;
     font-size: 13px;
     font-weight: 400;
@@ -752,7 +752,7 @@ a:focus {
     right: auto;
     width: 8px;
     z-index: 1;
-    border-radius: 50%
+    border-radius: 50%;
 }
 .nav-md ul.nav.child_menu li:after {
     border-left: 1px solid #425668;
@@ -1665,7 +1665,7 @@ span.right {
     padding: 5px 0 0 0;
     position: fixed;
     width: 230px;
-    background: #2A3F54;
+    background: #FFF;
 	z-index:999;
 }
 .sidebar-footer a {
