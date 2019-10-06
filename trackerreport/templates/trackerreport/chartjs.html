@@ -169,6 +169,8 @@
   <th> Distance Covered (KM) </th>
   <th> Fuel Economy (Ltrs) </th>
   <th> Top Speed (KM) </th>
+  <th> Latitude </th>
+  <th> Longitude</th>
  </tr>
 
   {% for v in allReports %}
@@ -181,6 +183,8 @@
     <td> {{v.distance_covered | floatformat:"2"}} km</td>
     <td> {{v.fuel_economy | floatformat:"2"}} ltrs</td>
     <td> {{v.top_speed | floatformat:"2"}} km </td>
+    <td> {{v.latitude}} </td>
+    <td> {{v.longitude}}</td>
   </tr>
   {% endfor %}
 </table>

@@ -16,6 +16,8 @@ class VehicleReport(models.Model):
 	move_at = models.CharField(max_length=100, blank=True, null=True)
 	overspeed = models.FloatField(null=True, default=0)
 	fuel_economy = models.FloatField(null=True, default=0)
+	latitude = models.CharField(max_length=50, null=True)
+	longitude = models.CharField(max_length=50, null=True)
 	upto = models.DateField(null=True)
 	added = models.DateTimeField(auto_now_add=True)
 

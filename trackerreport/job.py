@@ -72,6 +72,8 @@ def save_record(record, login_hash, device_id, upto):
 			move_duration = record['Move_duration'],
 			stop_duration = record['Stop_duration'],
 			fuel_economy = record['Fuel_economy'],
+			latitude = record['Latitude'],
+			longitude = record['Longitude'],
 			login_hash = login_hash,
 			device_id = device_id,
 			upto = upto.date()
@@ -90,7 +92,10 @@ def transform(device_history):
 	device['Top_speed'] = device_history['top_speed'].split(" ")[0]
 	device['Move_duration'] = device_history['move_duration']
 	device['Fuel_per_km'] = device_history['device']['fuel_per_km'] 
-	device['Location'] = device_history['device']['object_owner'] 
+	device['Location'] = device_history['device']['object_owner']
+	device['Latitude'] = device_history['device']['traccar']['lastValidLatitude']
+	device['Longitude'] = device_history['device']['traccar']['lastValidLongitude']
+
 	device['Stop_duration'] = device_history['device']['stop_duration']
 	fuel = device_history['fuel_consumption'].split(" ")[0]
 	distance = device_history['distance_sum'].split(" ")[0] 

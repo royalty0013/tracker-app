@@ -183,6 +183,8 @@ def aggregator(the_reports, the_devices):
 				temp['distance_allocated'] = device.distance_allocated
 				temp['fuel_allocated'] = device.fuel_allocated
 				temp['fuel_economy'] = device.fuel_economy
+				temp['latitude'] = device.latitude
+				temp['longitude'] = device.longitude
 		all_devices.append(temp)
 	return all_devices
 
